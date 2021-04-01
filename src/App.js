@@ -12,6 +12,7 @@ import { sortData, prettyPrintStat } from "./Utils";
 import InfoBox from "./Components/InfoBox";
 import numeral from "numeral";
 import Table from "./Components/Table";
+import Map from "./Components/Map";
 
 function App() {
   // states
@@ -79,7 +80,7 @@ function App() {
     <div className='app'>
       <div className='app__left'>
         <div className='app__header'>
-          <h1>Covid-19</h1>
+          <h1>COVID-19 Tracker</h1>
           <FormControl className='app__dropdown'>
             <Select
               variant='outlined'
@@ -92,36 +93,43 @@ function App() {
             </Select>
           </FormControl>
         </div>
-
         <div className='app__stats'>
           <InfoBox
             onClick={(e) => setcasesType("cases")}
-            title='Active Cases'
-            cases={prettyPrintStat(countryData.active)}
+            title='Coronavirus Cases'
+            isRed
+            active={casesType === "cases"}
+            cases={prettyPrintStat(countryData.todayCases)}
             total={numeral(countryData.cases).format("0.0a")}
           />
           <InfoBox
             onClick={(e) => setcasesType("recovered")}
-            title='Recovered Cases'
-            total={numeral(countryData.recovered).format("0.0a")}
+            title='Recovered'
+            active={casesType === "recovered"}
             cases={prettyPrintStat(countryData.todayRecovered)}
+            total={numeral(countryData.recovered).format("0.0a")}
           />
-
           <InfoBox
             onClick={(e) => setcasesType("deaths")}
             title='Deaths'
-            total={numeral(countryData.deaths).format("0.0a")}
+            isRed
+            active={casesType === "deaths"}
             cases={prettyPrintStat(countryData.todayDeaths)}
+            total={numeral(countryData.deaths).format("0.0a")}
           />
         </div>
-
-        <div className='app__right'>
-          <CardContent>
-            <h3>Live Cases</h3>
-            <Table countries={tableData} />
-          </CardContent>
-        </div>
+        <Map />
       </div>
+      <Card className='app__right'>
+        <CardContent>
+          <div className='app__information'>
+            <h3>Live Cases by Country</h3>
+            <Table countries={tableData} />
+            <h3>Worldwide new {casesType}</h3>
+            {/* <LineGraph casesType={casesType} /> */}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
