@@ -11,6 +11,7 @@ import "./App.css";
 import { sortData, prettyPrintStat } from "./Utils";
 import InfoBox from "./Components/InfoBox";
 import numeral from "numeral";
+import Table from "./Components/Table";
 
 function App() {
   // states
@@ -22,6 +23,8 @@ function App() {
   const [countryData, setcountryData] = useState({});
 
   const [casesType, setcasesType] = useState("cases");
+
+  const [tableData, settableData] = useState([]);
 
   /* UseEffects */
 
@@ -44,6 +47,7 @@ function App() {
           }));
 
           let finalData = sortData(data);
+          settableData(finalData);
 
           setcountryList(countries);
         });
@@ -114,6 +118,7 @@ function App() {
         <div className='app__right'>
           <CardContent>
             <h3>Live Cases</h3>
+            <Table countries={tableData} />
           </CardContent>
         </div>
       </div>
